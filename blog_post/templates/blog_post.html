@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class=" p-5 flex-md-row p-4 gap-4 py-md-5 align-items-center justify-content-center bg-body-tertiary rounded-3 my-3 ">
+
+        <h2 class="h2 mb-3 fw-normal">{{ title }}</h2>
+        <h3 class="h3 mb-2 fw-normal">Written by: {{ post.author.username }}</h3>
+        <h4 class="h4 mb-2 fw-normal">Published: {{ post.date.strftime('%B %d, %Y') }}</h4>
+        <p>{{ post.content }}</p>
+
+        {% if post.author == current_user %}
+            <div class="">
+                <a class="btn btn-outline-secondary" href="{{ url_for('blog_posts.update', blog_post_id=post.id) }}">Update</a>
+                <button class="btn btn-danger" type="button" data-bs-toggle="modal" data-bs-target="#del_modal">Delete
+                </button>
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="modal" tabindex="-1" role="dialog" id="del_modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Delete Post?</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want delete the post?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <form action="{{ url_for('blog_posts.delete_post', blog_post_id=post.id) }}" method="POST">
+                        <input class="btn btn-outline-danger" type="submit" value="Delete">
+                    </form>
+{#                    <button type="button" class="btn btn-outline-danger">Delete</button>#}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
